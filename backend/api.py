@@ -1,14 +1,20 @@
 from flask import Flask, request, jsonify
 from llama_cpp import Llama
-
+import os
 
 app = Flask(__name__)
 
-
+path = None
+models = []
+for filename in os.listdir("model"):
+    print(filename)
+    if filename.endswith(".gguf"):
+            path = os.path.abspath(os.path.join("model", filename))
+print(path)
 
 # Load the GGUF LLaMA model
 llama = Llama(
-    model_path="/home/CIN/tcl/projeto/model/Llama-3.2-3B-Instruct-Q6_K.gguf",
+    model_path=path,
     n_gpu_layers=-1,
     n_ctx=2048)
 
@@ -48,5 +54,3 @@ def catch_all(path=""):
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
 
-    
-####
